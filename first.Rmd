@@ -1,0 +1,38 @@
+---
+title: "my first markdown file"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(readr)
+library(ggplot2)
+```
+
+## Reading the Data
+This dataset shows all of the students' 5 favorite restaurants. We followed a specific data dictionary to input the data into the dataset which allows us to be consistent. 
+
+```{r}
+fav_restaurants <- read.csv("C:\\Users\\az7xr\\Desktop\\fav_restaurants.csv")
+```
+
+## Plotting the Data
+This is a bar graph that shows how many restaurants were entered under each type of cuisine.
+```{r}
+ggplot(fav_restaurants, aes(cuisine)) +
+  geom_bar()
+```
+
+This is a scatter plot of how often we visit per year in relation to the cost of an average meal per person.
+```{r}
+ggplot(fav_restaurants, aes(yearly_visits, cost_per_person)) +
+  geom_point()
+```
+
+This is a bar graph that shows where the restaurants are that were entered and how many of each there are.
+```{r}
+ggplot(fav_restaurants, aes(location)) +
+  geom_bar()
+```
+
