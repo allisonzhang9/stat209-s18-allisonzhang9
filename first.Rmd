@@ -4,7 +4,9 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 library(dplyr)
 library(readr)
 library(ggplot2)
@@ -14,7 +16,7 @@ library(ggplot2)
 This dataset shows all of the students' 5 favorite restaurants. We followed a specific data dictionary to input the data into the dataset which allows us to be consistent. 
 
 ```{r}
-fav_restaurants <- read.csv("C:\\Users\\az7xr\\Desktop\\fav_restaurants.csv")
+fav_restaurants <- read_csv("https://raw.githubusercontent.com/URstats/stat209-s18-allisonzhang9/master/fav_restaurants.csv")
 ```
 
 ## Plotting the Data
