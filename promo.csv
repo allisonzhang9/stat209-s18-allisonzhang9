@@ -1,0 +1,15 @@
+date,day_of_week,number_of_emails,number_of_duplicate_emails,number_of_opened_emails,event_most_advertised
+1/31/18,Wednesday,46,5,0,superbowl 
+2/1/18,Thursday,43,7,0,valentines day
+2/2/18,Friday,33,3,0,valentines day
+2/3/18,Saturday,24,2,1,groundhog day
+2/4/18,Sunday,33,4,5,superbowl 
+2/5/18,Monday,37,6,0,valentines day
+2/6/18,Tuesday,36,5,1,valentines day
+2/7/18,Wednesday,37,3,2,valentines day
+2/8/18,Thursday,43,6,4,valentines day
+2/9/18,Friday,39,4,4,valentines day
+2/10/18,Saturday,27,3,3,none
+2/11/18,Sunday,33,4,4,valentines day
+2/12/18,Monday,34,5,3,valentines day
+2/13/18,Tuesday,35,5,0,valentines day
