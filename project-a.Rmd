@@ -1,0 +1,71 @@
+---
+title: "Frequency of Promotional Emails"
+author: "Allison Zhang"
+output: html_notebook
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(ggplot2)
+library(dplyr)
+```
+
+# Frequency of Promotional Emails
+
+## Overview
+
+Before I collected my data I asked the question of "what patterns exist in the sending out of promotional emails from online retail stores?" I found this interesting because I realized that I recieve a large amount of promotional emails each day, and I wanted to know if there was a pattern within the frequency in which they are sent out. To collect my data I went into the promotions tab of my personal email every night and documented the date, how many emails I recieved that day, what day of the week it was, the number of duplicate emails I recieved, the number of emails I opened that day, and the event most advertised in all of the emails. I did this for two weeks, starting at the end of January to the middle of February. The overall data collecting process was easy, as my email stored all of the data I needed to collect which made the data accessible and easy to duplicate.
+
+
+## Data dictionary
+
+Here is a data dictionary for the promo dataset:
+
+- **date**: A numeric variable giving the date of the collected data (in M/D/YY format)
+- **day_of_week**: A categorical variable giving the day of the week of the collected data. Possible options are:
+  -"Monday"
+  -"Tuesday"
+  -"Wednesday"
+  -"Thursday"
+  -"Friday"
+  -"Saturday"
+  -"Sunday"
+- **number_of_emails**: A numeric variable giving how many promotional emails I recieved on each day (from 12am to 11:59 pm)
+- **number_of_duplicate_emails**: A numeric variable giving how many duplicate emails from the same company I recieved 
+-**number_of_opened_emails**: A numeric variable giving how many of the promotional emails I opened on the day of recieving the emails
+-**event_most_advertised**: A character variable giving what event or holiday was most advertised out of all of the emails 
+
+Which can be read in as follows:
+
+```{r}
+promo <- read_csv("https://raw.githubusercontent.com/urstats/stat209-s18-allisonzhang9/master/promo.csv")
+promo
+```
+
+## Exploratory Analysis
+
+My data shows that in the two weeks that I recorded the amount of promotional emails I recieved, Thursday overall was the day that I recieved the most promotional emails. On both Thursdays I recieved 43 emails, which are the two highest other than the 46 emails I recieved on the the last day of January, which was a Wednesday. I think that the last day of January had the most emails because the end of each month is commonly known to have the best deals, such as the myth that the best deal for cars is at the end of the month, so people are more willing to shop at the end of the month. I wasn't expecting Thursday to be the day that I recieved the most emails, however thinking back on it this is logical because Thursday is often the day that many people get paid. It would make sense that stores would send out emails on the day people get paid because then they are more likely to spend more money if they recieve money. 
+
+```{r, echo=FALSE}
+ggplot(promo, aes(day_of_week, number_of_emails))+
+  geom_point(color="purple", size=2)+
+  annotate("text", x = 6.8, y = 47, label = "Last Day of January")
+```
+
+This plot highlights the number of emails I recieved each day (blue) in comparison to the number of duplicate emails I recieved (black). It shows that the number of emails I recieved overall corresponds to the number of duplicate emails I recieved, as days which I recieved more emails, such as Monday and Thursday, also had more duplicate emails. This was to be expected because obviously brands push their businesses more on days that people get paid or are more expected to shop. 
+
+```{r, echo=FALSE}
+ggplot(promo, aes(day_of_week, number_of_emails))+
+  geom_point(size=2, color="blue")+
+  geom_point(aes(y=number_of_duplicate_emails))
+```
+
+
+## Conclusion
+
+I learned that the number of promotional emails I receive does vary depending on the day of the week. I recognized that I receive the most overall promotional emails on Thursday, and the second most on Friday. If I had more time, I would like to learn more about how the time of the month effects promotional emails, such as how I found that I recieved the most amount of emails over all on the last day of January.
+
+## References
+
+
