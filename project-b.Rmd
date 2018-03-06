@@ -42,7 +42,9 @@ ggplot(pittsburgh, aes(ctime_45_plus, sex_male))+
   geom_point(size=1)+
   geom_point(aes(y=sex_female), color="green", size=2)+
   xlab("Percentage of Residents with Over 45 Minutes of Travel Time")+
-  ylab("Percentage of Men and Women")
+  ylab("Percentage of Men and Women")+
+  annotate("text", x=20, y=60, label="women", color="green", size=8)+
+  annotate("text", x=20, y=40, label="men", size=8)
 ```
 
 ##2. Race Segregation
@@ -67,6 +69,8 @@ ggplot(pittsburgh, aes(median_rent, income_40_minus))+
   annotate("rect", xmin = 100, xmax = 1000, ymin = 0,
                  ymax = 100, alpha=.2)
 ```
+
+##Conclusion
 
 Pittsburgh is known for its technology, its food, and its livability, but often people forget about the 
 demographics that define Pittsburgh. These few graphs are just a small look into the people of Pittsburgh, but never forget that there are many more factors that make cities the way they are today. 
