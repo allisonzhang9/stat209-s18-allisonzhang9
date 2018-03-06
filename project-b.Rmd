@@ -1,0 +1,83 @@
+---
+title: "Visualizing Pittsburgh"
+author: "Allison Zhang"
+output: html_notebook
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(fig.height = 5)
+knitr::opts_chunk$set(fig.width = 8.5)
+knitr::opts_chunk$set(out.width = "100%")
+knitr::opts_chunk$set(dpi = 300)
+
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(ggmap)
+library(viridis)
+```
+
+```{r}
+tracts <- read_csv("https://raw.githubusercontent.com/statsmaths/stat_data/gh-pages/acs_tract_data_2016.csv.gz")
+
+pittsburgh <- filter(tracts, cbsa=="Pittsburgh, PA")
+
+pittsburgh$ctime_45_plus <- pittsburgh$ctime_45_59 + pittsburgh$ctime_60_89 + pittsburgh$ctime_90_99
+
+pittsburgh$income_40_minus <- pittsburgh$income_000_010 + pittsburgh$income_010_015 + pittsburgh$income_015_020 + pittsburgh$income_020_025 + pittsburgh$income_025_030 + pittsburgh$income_030_035+ pittsburgh$income_035_040
+```
+
+  Pittsburgh, Pennsylvania is known to be an up and coming city in the United States. Because of its livability and its low prices, many people are moving to Pittsburgh. This is also true because of Pittsburgh's colleges that are known nationwide, such as Carnegie Mellon University and University of Pittsburgh. These factors are allowing it becoming a hot spot for big companies, specifically Google and Uber. Because of this large influx in population, the demographics are constantly changing, leading to interesting trends that might not have existed before. There are many different trends that are interesting and could be explored, but here are three trends that I explored which might be a surprise to many people who don't know much about the city of bridges. 
+
+##1. Travel Time
+
+  When people think about Pittsburgh, they often don't think about traffic, waiting, and 365 (the East to West parkway that leads basically entirely through Pittsburgh). However, I was interested in the typical commute time that most citizens living inside or outside of Pittsburgh face. Below is a graph that shows the percentage of residents that have over 45 minutes of commute time. The green points below show the percentage of women, while the black points below show the percentage of men. What I found interesting within this visualization is that it is obvious that a larger percentage of women than men travel over 45 minutes to go to work. This is surprising me to because I assumed they would be generally equal. 
+  You may be asking yourself why is this a trend? A possible option is that women have a harder time finding jobs in their area, so they're forced to travel farther. This is often because of a woman's mindset, as they often have less confidence then men, and often pull back from certain jobs because of this. This could result in women finding different jobs than men, leading them to commute farther or longer. Another reason this may be a trend that I have researched is that men are usually more aggressive drivers than women. In 2005, Roberts and Indermaur found that men were almost eight times more likely than females to be perpetrators in an act of driving violence (Kellow, 2016). Because men drive more aggressively, they often arrive at their destinations faster than women. These are two hypotheses that I have made, but I can't say for sure what the real reason is that a higher percentage of women travel longer than men. 
+
+```{r}
+ggplot(pittsburgh, aes(ctime_45_plus, sex_male))+
+  geom_point(size=1)+
+  geom_point(aes(y=sex_female), color="green", size=2)+
+  xlab("Percentage of Residents with Over 45 Minutes of Travel Time")+
+  ylab("Percentage of Men and Women")
+```
+
+##2. Race Segregation
+
+  As seen in most cities, Pittsburgh also has predominantly white, Asian, and African American communities. This visualization focuses on the African American populations in Pittsburgh. As you can tell, there is one densely populated area in Pittsburgh that has the largest percentage population of African Americans. From my knowledge of Pittsburgh, this would be Wilkinsburg. Wilkinsburg is on the outskirts of the city, and was founded when it became a railroad stop in the 1850s, bringing many workers into Pittsburgh (Wilkinsburg). This is the time when many African Americans flooded into Pittsburgh, settling in what's now known as Wilkinsburg Borough. There is also a larger amount of African Americans in downtown Pittsburgh. This is probably caused by the large amount of jobs in downtown Pittsburgh, leading to the increase of not only African Americans, but a larger population overall. The history of Pittsburgh helps show its current demographics, including who currently resides in all communities across the city. 
+
+```{r}
+qmplot(lon, lat, data = pittsburgh, geom = "blank")+
+geom_point(aes(color = race_black), alpha = 0.5) +
+  scale_color_viridis()
+```
+
+##3. Paying Rent
+
+There was also a trend between households with income less than forty thousand dollars and the median amount of rent they pay. As expected, most of these households payed a small median rent, mostly under 1000 dollars. However, there was a small percentage paying much more for their median rent, paying up to 2500 dollars. A reason for this may be housing subsidies for individuals with very low income, or if their spouse or family member had a higher income and paid for the housing.  An obvious pattern is shown here, but it isn't linear. This shows that it is more common for most people with income less than 40 thousand dollars to pay less rent. This is also shown by the highlighted box, which you can see has the most amount of points in it in the entire graph, showing the trend. This pattern is something that most people would expect, but would still find interest in knowing. 
+
+```{r}
+ggplot(pittsburgh, aes(median_rent, income_40_minus))+
+  geom_point()+
+  xlab("Median Rent")+
+  ylab("Percentage of Households with income less than 40 thousand dollars")+
+  annotate("rect", xmin = 100, xmax = 1000, ymin = 0,
+                 ymax = 100, alpha=.2)
+```
+
+Pittsburgh is known for its technology, its food, and its livability, but often people forget about the 
+demographics that define Pittsburgh. These few graphs are just a small look into the people of Pittsburgh, but never forget that there are many more factors that make cities the way they are today. 
+
+## References
+
+Byham, Tacy. “It's Not about Men vs. Women in the Workplace.” Pittsburgh Post-Gazette, PG Publishing Co, 27 Aug. 2017, www.post-gazette.com/opinion/Op-Ed/2017/08/27/Gender-diversity-is-not-about-men-vs-women-in-the-workplace/stories/201708270016.
+
+“History.” Borough of Wilkinsburg, www.wilkinsburgpa.gov/about-wilkinsburg/history/.
+
+Kellow, Gracie. “Fact Check: Are Men Really More Aggressive Drivers?” All the Rage, 15 Mar. 2016, blog.uwgb.edu/alltherage/fact-check-are-men-really-more-aggressive-drivers/.
+
+
+
