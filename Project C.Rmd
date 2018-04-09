@@ -1,0 +1,69 @@
+---
+title: "8:15 Orders"
+author: "Allison Zhang"
+output: html_document
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(out.width = "100%")
+knitr::opts_chunk$set(dpi = 300)
+
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(ggmap)
+library(viridis)
+library(forcats)
+library(smodels)
+```
+```{r}
+eightfifteen <- read_csv("https://raw.githubusercontent.com/urstats/stat209-s18-allisonzhang9/master/815.csv")
+```
+
+## Introduction
+I'm sure you've heard the very common stereotype that women order more "fruity" or "sugary" drinks then men. I decided to challenge these stereotypes, and see if this was actually a trend that was previlant when ordering drinks. Specifically, drinks on University of Richmond's campus, at 8:15. My first hypothesis is that on average, males buy more items than females. Secondly, that females add more add ins to their drinks than males. Lastly, the more items one buys, the more likely they are so have more add ins.
+
+## Methods
+To collect my three variables (gender, # of items bought, and # of add ins), I sat in 8:15. I listened to the barista call out the drink order while placing the drinks on the counter, and I observed who picked up the drink. Any additional things they would call other than the basic name of the drink would be considered an add in (sweetner, whip cream, milk preference, etc.) I would also note when that person was ordering if they ordered any food items. I then would mark their gender, the number of items bought in total, and the number of add ins each person ordered.
+For the inference of the mean, I am using the 'lm_basic' function to test for items_bought, and add_ins respectively, using gender (as a categorical variable). For the linear regression, I am also using 'lm_basic'to run a regression of items bought and add ins. 
+
+## Results
+
+```{r}
+model <- lm_basic(items_bought ~ 1 + gender, data = eightfifteen)
+reg_table(model, level= 0.95)
+```
+```{r}
+eightfifteen_summarize <- group_summarize(eightfifteen, gender)
+ggplot(eightfifteen_summarize, aes(gender, items_bought_mean))+
+  geom_point()
+```
+As seen in this graph, the average items bought for women was higher than men, which accounts for why the average estimate for men is negative. 
+
+```{r}
+model <- lm_basic(add_ins ~ 1 + gender, data = eightfifteen)
+reg_table(model, level= 0.95)
+```
+```{r}
+ggplot(eightfifteen, aes(add_ins, fill=gender))+
+  geom_histogram()
+```
+As seen in this histogram, more women got zero or one add ins than men. However, more men got three add ins than women. This explains how males's mean prediction is higher than womens.
+
+```{r}
+model <- lm_basic(items_bought ~ 1 + add_ins, data = eightfifteen)
+reg_table(model, level= 0.95)
+```
+```{r}
+qplot(items_bought, add_ins, data = eightfifteen) + geom_smooth(method = "lm")
+```
+As seen in this graph, it is unknown if the slope is positive or negative (the gray shaded area), which agrees with the output of the regression analysis. 
+
+## Conclusions
+ For my first hypothesis (on average, males buy more items than females), I could find no significant effect that gender effects the number of items bought at 8:15. For my second hypothesis (females add more add ins to their drinks than males), I could also find no significant effect that gender effects the number of add ins added to drinks at 8:15. For my third and last hypothesis (the more items bought, the more add ins added), I could find no significant effect relating the number of items bought and the number of add ins added. Because all of my inference and regression analyses were not significant (confidence interval included zero), none of my hypotheses could be proven or disproven. In my study, this goes against the gender stereotype that women often put more add ins than men. It actually suggests that men put more add ins then women, but it is not statistically sure. If done on a larger scale, this study might be more informative and accurate if gender actually makes a difference when looking at how many items are bought and how many add ins are requested in drinks. 
+
+
+## References
