@@ -1,0 +1,74 @@
+---
+title: "Melanoma in Relation to Race"
+author: "Allison Zhang"
+output: html_document
+---
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(out.width = "100%")
+knitr::opts_chunk$set(dpi = 300)
+
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(ggmap)
+library(viridis)
+library(forcats)
+library(smodels)
+```
+
+
+```{r}
+cancer <- read_csv("https://statsmaths.github.io/stat_data/cancer_inc_data.csv")
+state <- group_summarize(cancer, state)
+```
+
+Around the world, everyone knows of the many types of cancer. Certain types of cancer are known to be some of the deadliest diseases in the world. One specific type of cancer is Melanoma, the deadliest type of skin cancer. In the top layer of the skin, there are three main types of cells: squamous cells, basal cells, and melanocytes. Melanoma begins in the melanocytes,  the cells that produce the pigment melanin that colors the skin, hair and eyes. How does one get Melonoma? Research suggests that approximately 90% of melanoma cases can be linked to exposure to ultraviolet (UV) rays, either natural or artificial sources. The Melanoma Research Foundation states that all race, age, and gender are equally susceptible to melanoma ("What"). However, the data from the US County-level cancer incidence rates and demographics seems to tell a different story. The data finds that people that identify as African American have lower incidence rates of melanoma than people that identify as white in all cities except for Washington D.C.
+
+##Correlation Between Race and Melanoma
+
+As shown in this model, the average rates of blacks is significantly lower than the aveage rate of melanoma. This is shown because all three values for black_alone_mean are negative, so zero is not within the confidence interval. This tells us that the average rate for blacks is -0.1779 less than the mean in general. Research agrees with this, as research pulled data from patients given a melanoma diagnosis between 1992 and 2009 show that white people had the highest rate of skin cancer, with 45.8 diagnoses per 100,000 people, while black people had the lowest, with 1.35 diagnoses per 100,000 people (Meadows-Fernandez). However, while blacks are diagnosed less, they have a higher mortality rate from melanoma. There are uncountable reasons for this, one being that African Americans often believe they don't have to protect themselves from the sun because of their skin color. However, this is untrue, and is regularly disproved.
+
+```{r}
+model <- lm_basic(melanoma_mean ~1 + black_alone_mean, data = state)
+reg_table(model, level= 0.95)
+```
+
+As shown in this model, the average rates of whites alone is significantly higher than the aveage rate of melanoma. This is proven because all three values for white_alone_mean are positive, so zero is not within the confidence interval. This model shows that the average white alone mean is 0.13772 higher than the average melanoma rate in general. The Mayo Clinic lists "fair skin" as a risk factor that may increase one's risk of melanoma, which might be a reason for this larger percentage. Having less melanin in your skin means less protection from damaging UV radiation. Also if one has blond or red hair, light-colored eyes, and freckle or sunburn easily (which is all common in white people), they're more likely to develop melanoma than is someone with a darker complexion ("Melanoma"). 
+
+```{r}
+model <- lm_basic(melanoma_mean ~1 + white_alone_mean, data = state)
+reg_table(model, level= 0.95)
+```
+
+This trend is also shown in the below graph, as you can see whites alone (purple points) have a much larger percentage of melanoma than blacks alone (black points). There is one significiant outlier in both the white and black population on the graph. This is Washington DC. The first thing odd about DC is that it has a very low incidence rate of melanoma. Washington, D.C., has a melanoma incidence of 9 out of 100,000 individuals, the lowest rate of deadly skin cancer in the nation, according to the U.S. Centers for Disease Control and Prevention (Hauser). After looking into this, I result much of this to be due to the fact that residents of Washington DC emerged as the most sun-smart city out of 32 metropolitan regions whose adult residents were recently polled on their knowledge about attitudes and behaviors toward tanning and sun protection according to the survey conducted by the American Academy of Dermatology ("Skin"). Also, DC is the only region that has a larger percentage of blacks alone than whites alone, and this is due to DC's large population of African Americans, in comparison to all other states. 
+
+```{r}
+ggplot(state, aes(melanoma_mean, black_alone_mean))+
+  geom_point(size=1)+
+  geom_point(aes(y=white_alone_mean),color="purple", size=1)+
+  xlab("Incidence Rate of Melanoma")+
+  ylab("Percentage of Whites and Blacks")+
+  annotate("text", x=8.5, y=45, label="DC", size=4)+
+  annotate("text", x=19, y=75, label="Whites", size=4, color="purple")+
+  annotate("text", x=20, y=12, label="Blacks", size=4)+
+  annotate("rect", xmin = 8, xmax = 9,
+                   ymin = 35, ymax = 50,
+                   fill = "blue", alpha = 0.1)
+```
+
+Melanoma is a very deadly cancer, and while white people are more likely to develop it, it is possible for anyone, regardless of race, to get it. It is actually more important for African Americans to watch for signs, as they are often diagnosed later than whites, leadng a higher likelyhood of death. It is important that everyone is informed and educated on the topic of Melanoma, and follow the correct steps to try to reduce their risks to be safe and healthy. 
+
+##References
+
+Hauser, Annie. “The Worst States for Melanoma: Does Cloud Cover Matter?” The Weather Channel, The Weather Channel, 21 July 2015, weather.com/health/news/worst-states-for-melanoma.
+
+Meadows-Fernandez, Rochaun. “Why Are Black People Less Likely to Get Melanoma, But More Likely to Die From It?” SELF, SELF, 6 Feb. 2018, www.self.com/story/black-people-melanoma-skin-cancer.
+
+“Melanoma.” Mayo Clinic, Mayo Foundation for Medical Education and Research, 28 Jan. 2016, www.mayoclinic.org/diseases-conditions/melanoma/symptoms-causes/syc-20374884.
+
+“Skin Cancer Melanoma and Reducing Your Risk.” Chevy Chase Dermatology LLC RSS, Chevy Chase Dermatology, www.chevychasedermatology.com/about-us/faqs.
+
+“What Is Melanoma?” Melanoma Research Foundation, 15 Mar. 2017, www.melanoma.org/understand-melanoma/what-is-melanoma.
